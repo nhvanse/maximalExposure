@@ -1,3 +1,5 @@
+# Vut plot ra day nhe, de trong src no k logic trong project lam, trong src chi nen chua class java hoac kotlin thoi nhe
+# File script phu tro thi nen de o ngoai, de truy xuat hon
 
 import matplotlib.pyplot as plt
 import numpy as np

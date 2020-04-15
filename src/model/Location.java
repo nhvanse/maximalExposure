@@ -1,31 +1,25 @@
 package model;
 
-import java.lang.Math;
 import java.util.ArrayList;
 
-public class Location {
-	public float x;
-	public float y;
+// Location extends Point, no se la 1 diem, co x, y va hanh vi distance
+public class Location extends Point {
+
 	public float exposure;
+
 	public Location(float x, float y) {
-		this.x = x;
-		this.y = y;
+		super(x, y);
 	}
 	
-	public double euclidDistanceTo(Location loc2) {
-		return Math.sqrt(Math.pow((this.x - loc2.x), 2) + Math.pow((this.y - loc2.y), 2));
-	} 
-	
 	public float exposure(Sensor sensor) {
-		double distance = this.euclidDistanceTo(new Location(sensor.x, sensor.y));
-		return distance>sensor.r?0:1;
+		return this.euclidDistanceTo(new Location(sensor.x, sensor.y)) > sensor.r ? 0 : 1;
 	}
 	
 	public float sumExposure(ArrayList<Sensor> listSensors) {
 		float sumE = 0;
-		for (Sensor sensor: listSensors) {
+		for (Sensor sensor: listSensors)
 			sumE += this.exposure(sensor);
-		}
 		return sumE;
 	}
+
 }

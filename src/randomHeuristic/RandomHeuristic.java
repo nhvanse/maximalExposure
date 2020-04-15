@@ -6,18 +6,24 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
+import data.SensorNetwork;
 import model.*;
 
 public class RandomHeuristic {
+
+	// Input
 	SensorNetwork net;
+
+	// Output
 	ArrayList<Location> path;
 	float exposure;
 	float currTime;
+
+	// Temp
 	Location currLoc;
 
-	Location vertices[][]; // vertices of grid
-	float deltaS;//
-	int L, K; // numbers of rows and columns of grid
+	// Grid nen de o muc data trong sensor network nhe
+	float deltaS;
 
 	public RandomHeuristic() {
 		this.net = new SensorNetwork();
@@ -26,19 +32,9 @@ public class RandomHeuristic {
 		this.exposure = 0;
 	}
 
-	public void makeGrid() {
-		this.K = Math.round(this.net.wOfField / this.deltaS); // number of columns
-		this.L = Math.round(this.net.hOfField / this.deltaS); // number of rows
-		this.vertices = new Location[L + 1][K + 1];
-		for (int i = 0; i <= this.L; i++) {
-			for (int j = 0; j <= this.K; j++) {
-				Location newLoc = new Location(j * deltaS, i * deltaS);
-				newLoc.exposure = newLoc.sumExposure(this.net.listSensors);
-				this.vertices[i][j] = newLoc;
-			}
-		}
-	}
+	// Chuyen make grid qua sensor network nhe
 
+	//
 	public boolean timeCondition(Location nextLoc) {
 		int rowIndexOfDest = Math.round(this.net.dest.y / this.deltaS);
 		int columnIndexOfDest = Math.round(this.net.dest.x / this.deltaS);
@@ -67,9 +63,9 @@ public class RandomHeuristic {
 			} else {
 				newColumnIndex = columnIndex - 1;
 			}
-		} while (newColumnIndex > K || newColumnIndex < 0 || newRowIndex > L || newRowIndex < 0);
+		} while (newColumnIndex > net.grid.K || newColumnIndex < 0 || newRowIndex > net.grid.L || newRowIndex < 0);
 
-		return this.vertices[newRowIndex][newColumnIndex];
+		return net.grid.vertices[newRowIndex][newColumnIndex];
 	}
 
 	public void computeShortestPath() { // find shortest path to dest
@@ -89,7 +85,7 @@ public class RandomHeuristic {
 				} else {
 					tempColumnIndex--;
 				}
-				nextLoc = this.vertices[tempRowIndex][tempColumnIndex];
+				nextLoc = net.grid.vertices[tempRowIndex][tempColumnIndex];
 				this.path.add(nextLoc);
 				this.currTime += this.deltaS / this.net.speed;
 				this.exposure += this.currLoc.sumExposure(this.net.listSensors) * this.deltaS / this.net.speed;
@@ -102,7 +98,7 @@ public class RandomHeuristic {
 				} else {
 					tempRowIndex--;
 				}
-				nextLoc = this.vertices[tempRowIndex][tempColumnIndex];
+				nextLoc = net.grid.vertices[tempRowIndex][tempColumnIndex];
 				this.path.add(nextLoc);
 				this.currTime += this.deltaS / this.net.speed;
 				this.exposure += this.currLoc.sumExposure(this.net.listSensors) * this.deltaS / this.net.speed;
@@ -122,8 +118,8 @@ public class RandomHeuristic {
 		writer.write(net.numOfSensors + "");
 		writer.newLine();
 
-		for (int i = 0; i < net.numOfSensors; i++) {
-			Sensor sensor = net.listSensors.get(i);
+		// Comment: co the dung for each de lan ngan gon code
+		for (Sensor sensor: net.listSensors) {
 			writer.write(sensor.x + " " + sensor.y + " " + sensor.r);
 			writer.newLine();
 		}
@@ -148,8 +144,9 @@ public class RandomHeuristic {
 
 		writer.write(finalpath.size() + "");
 		writer.newLine();
-		for (int i = 0; i < finalpath.size(); i++) {
-			Location loc = finalpath.get(i);
+		
+		// Comment: co the dung for each de la ngan gon code
+		for (Location loc: finalpath) {
 			writer.write(loc.x + " " + loc.y);
 			writer.newLine();
 		}
@@ -168,17 +165,19 @@ public class RandomHeuristic {
 		SensorNetwork generalNet = new SensorNetwork();
 		generalNet.initialFromFile(dataFile);
 		int iter = 0;
-		while (iter < 1000) {
-			iter++;
+		
+		// Dung lenh gop cho nhanh ^
+		while (iter++ < 1000) {
 			RandomHeuristic rh = new RandomHeuristic();
 			SensorNetwork net = rh.net;
 			net.initialFromFile(dataFile);
-			rh.deltaS = (float) 0.5;
-			rh.makeGrid();
+
+			// Comment: Lenh gop luon cho ngan gon
+			net.makeGrid(rh.deltaS = (float) 0.5);
 
 			int rowIndexOfStart = Math.round(net.start.y / rh.deltaS);
 			int columnIndexOfStart = Math.round(net.start.x / rh.deltaS);
-			rh.currLoc = rh.vertices[rowIndexOfStart][columnIndexOfStart];
+			rh.currLoc = net.grid.vertices[rowIndexOfStart][columnIndexOfStart];
 			rh.path.add(rh.currLoc);
 
 			Location nextLoc = rh.randomLocation();
@@ -198,9 +197,12 @@ public class RandomHeuristic {
 				finalpath = rh.path;
 			}
 		}
+
 		System.out.println("Data file: " + dataFile);
 		System.out.println("exposure :" + maxEx);
 		System.out.println(finalpath.size());
 		saveToFile("./output/output.txt", generalNet, finalpath, maxEx);
 	}
+
 }
+

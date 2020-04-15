@@ -1,4 +1,4 @@
-package model;
+package data;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -10,7 +10,15 @@ import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.util.Scanner;
 
+import model.Location;
+import model.Sensor;
+
+// Package model nen chua nhung material, nhung class nho nhat cua chuong trinh thoi nhe
+// Nen de cai nay ra 1 package rieng, de quan ly, logic hon
+//
+// Class nay code tot, on dinh
 public class SensorNetwork {
+
 	public float wOfField, hOfField; // width and height of sensor network field.
 	public int numOfSensors;
 	public ArrayList<Sensor> listSensors;
@@ -20,12 +28,16 @@ public class SensorNetwork {
 	public Location start;
 	public Location dest;
 
-	public SensorNetwork() {
-
+	// Luoi
+	public static class Grid {
+		public Location vertices[][]; // vertices of grid
+		public int L; // numbers of rows and columns of grid
+		public int K;
 	}
 
-	public void randomInitial(float wOfField, float hOfField, int numOfSensors, float RmaxOfSensors, float speed,
-			float limitTime, float maxE) {
+	public Grid grid;
+
+	public void randomInitial(float wOfField, float hOfField, int numOfSensors, float RmaxOfSensors, float speed, float limitTime, float maxE) {
 		this.wOfField = wOfField;
 		this.hOfField = hOfField;
 		this.numOfSensors = numOfSensors;
@@ -38,11 +50,8 @@ public class SensorNetwork {
 		this.dest = new Location((float) (Math.round(wOfField * rand.nextFloat() / 0.5) * 0.5), hOfField);
 
 		this.listSensors = new ArrayList<Sensor>();
-		for (int i = 0; i < numOfSensors; i++) {
-			Sensor sensor = new Sensor(wOfField * rand.nextFloat(), hOfField * rand.nextFloat(),
-					RmaxOfSensors * rand.nextFloat());
-			this.listSensors.add(sensor);
-		}
+		for (int i = 0; i < numOfSensors; i++)
+			this.listSensors.add(new Sensor(wOfField * rand.nextFloat(), hOfField * rand.nextFloat(), RmaxOfSensors * rand.nextFloat()));
 	}
 
 	public void initialFromFile(String file) throws Exception {
@@ -61,8 +70,7 @@ public class SensorNetwork {
 			float x = Float.parseFloat(line[0]);
 			float y = Float.parseFloat(line[1]);
 			float z = Float.parseFloat(line[2]);
-			Sensor sensor = new Sensor(x, y, z);
-			this.listSensors.add(sensor);
+			this.listSensors.add(new Sensor(x, y, z));
 		}
 
 		line = sc.nextLine().trim().split(" ");
@@ -136,6 +144,24 @@ public class SensorNetwork {
 		System.out.println("Max exposure of each location: " + this.maxE);
 	}
 
+	public void makeGrid(float deltaS) {
+		int K = Math.round(this.wOfField / deltaS); // number of columns
+		int L = Math.round(this.hOfField / deltaS); // number of rows
+		Location[][] vertices = new Location[L + 1][K + 1];
+		for (int i = 0; i <= L; i++) {
+			for (int j = 0; j <= K; j++) {
+				Location newLoc = new Location(j * deltaS, i * deltaS);
+				newLoc.exposure = newLoc.sumExposure(this.listSensors);
+				vertices[i][j] = newLoc;
+			}
+		}
+		this.grid = new Grid();
+		this.grid.K = K;
+		this.grid.L = L;
+		this.grid.vertices = vertices;
+	}
+
+	// Ham main test, kha tot ^
 	public static void main(String[] args) throws Exception {
 		SensorNetwork sNet = new SensorNetwork();
 		int numberSensors = 200;
@@ -146,3 +172,5 @@ public class SensorNetwork {
 	}
 
 }
+
+
