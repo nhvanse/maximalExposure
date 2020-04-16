@@ -22,7 +22,6 @@ public class RandomHeuristic {
 	// Temp
 	Location currLoc;
 
-	// Grid nen de o muc data trong sensor network nhe
 	float deltaS;
 
 	public RandomHeuristic() {
@@ -32,9 +31,6 @@ public class RandomHeuristic {
 		this.exposure = 0;
 	}
 
-	// Chuyen make grid qua sensor network nhe
-
-	//
 	public boolean timeCondition(Location nextLoc) {
 		int rowIndexOfDest = Math.round(this.net.dest.y / this.deltaS);
 		int columnIndexOfDest = Math.round(this.net.dest.x / this.deltaS);
@@ -118,8 +114,7 @@ public class RandomHeuristic {
 		writer.write(net.numOfSensors + "");
 		writer.newLine();
 
-		// Comment: co the dung for each de lan ngan gon code
-		for (Sensor sensor: net.listSensors) {
+		for (Sensor sensor : net.listSensors) {
 			writer.write(sensor.x + " " + sensor.y + " " + sensor.r);
 			writer.newLine();
 		}
@@ -144,9 +139,8 @@ public class RandomHeuristic {
 
 		writer.write(finalpath.size() + "");
 		writer.newLine();
-		
-		// Comment: co the dung for each de la ngan gon code
-		for (Location loc: finalpath) {
+
+		for (Location loc : finalpath) {
 			writer.write(loc.x + " " + loc.y);
 			writer.newLine();
 		}
@@ -158,21 +152,19 @@ public class RandomHeuristic {
 
 	public static void main(String[] args) throws Exception {
 		String dataFile = "./input/200.txt";
-		
+
 		float maxEx = 0;
 		ArrayList<Location> finalpath = new ArrayList<Location>();
-		
+
 		SensorNetwork generalNet = new SensorNetwork();
 		generalNet.initialFromFile(dataFile);
 		int iter = 0;
-		
-		// Dung lenh gop cho nhanh ^
+
 		while (iter++ < 1000) {
 			RandomHeuristic rh = new RandomHeuristic();
 			SensorNetwork net = rh.net;
 			net.initialFromFile(dataFile);
 
-			// Comment: Lenh gop luon cho ngan gon
 			net.makeGrid(rh.deltaS = (float) 0.5);
 
 			int rowIndexOfStart = Math.round(net.start.y / rh.deltaS);
@@ -181,6 +173,7 @@ public class RandomHeuristic {
 			rh.path.add(rh.currLoc);
 
 			Location nextLoc = rh.randomLocation();
+			// add random neighbors while intruder have enough time to go to the destination
 			while (rh.timeCondition(nextLoc)) {
 				rh.currTime += rh.deltaS / net.speed;
 				rh.exposure += rh.currLoc.sumExposure(net.listSensors) * rh.deltaS / net.speed;
@@ -205,4 +198,3 @@ public class RandomHeuristic {
 	}
 
 }
-

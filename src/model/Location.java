@@ -2,7 +2,6 @@ package model;
 
 import java.util.ArrayList;
 
-// Location extends Point, no se la 1 diem, co x, y va hanh vi distance
 public class Location extends Point {
 
 	public float exposure;
@@ -10,14 +9,14 @@ public class Location extends Point {
 	public Location(float x, float y) {
 		super(x, y);
 	}
-	
+
 	public float exposure(Sensor sensor) {
 		return this.euclidDistanceTo(new Location(sensor.x, sensor.y)) > sensor.r ? 0 : 1;
 	}
-	
+
 	public float sumExposure(ArrayList<Sensor> listSensors) {
 		float sumE = 0;
-		for (Sensor sensor: listSensors)
+		for (Sensor sensor : listSensors)
 			sumE += this.exposure(sensor);
 		return sumE;
 	}

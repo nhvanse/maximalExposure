@@ -13,10 +13,6 @@ import java.util.Scanner;
 import model.Location;
 import model.Sensor;
 
-// Package model nen chua nhung material, nhung class nho nhat cua chuong trinh thoi nhe
-// Nen de cai nay ra 1 package rieng, de quan ly, logic hon
-//
-// Class nay code tot, on dinh
 public class SensorNetwork {
 
 	public float wOfField, hOfField; // width and height of sensor network field.
@@ -28,16 +24,17 @@ public class SensorNetwork {
 	public Location start;
 	public Location dest;
 
-	// Luoi
+	// for grid based algorithms
 	public static class Grid {
 		public Location vertices[][]; // vertices of grid
-		public int L; // numbers of rows and columns of grid
-		public int K;
+		public int L; // numbers of rows of grid
+		public int K; // numbers of columns of grid
 	}
 
 	public Grid grid;
 
-	public void randomInitial(float wOfField, float hOfField, int numOfSensors, float RmaxOfSensors, float speed, float limitTime, float maxE) {
+	public void randomInitial(float wOfField, float hOfField, int numOfSensors, float RmaxOfSensors, float speed,
+			float limitTime, float maxE) {
 		this.wOfField = wOfField;
 		this.hOfField = hOfField;
 		this.numOfSensors = numOfSensors;
@@ -51,7 +48,8 @@ public class SensorNetwork {
 
 		this.listSensors = new ArrayList<Sensor>();
 		for (int i = 0; i < numOfSensors; i++)
-			this.listSensors.add(new Sensor(wOfField * rand.nextFloat(), hOfField * rand.nextFloat(), RmaxOfSensors * rand.nextFloat()));
+			this.listSensors.add(new Sensor(wOfField * rand.nextFloat(), hOfField * rand.nextFloat(),
+					RmaxOfSensors * rand.nextFloat()));
 	}
 
 	public void initialFromFile(String file) throws Exception {
@@ -161,7 +159,6 @@ public class SensorNetwork {
 		this.grid.vertices = vertices;
 	}
 
-	// Ham main test, kha tot ^
 	public static void main(String[] args) throws Exception {
 		SensorNetwork sNet = new SensorNetwork();
 		int numberSensors = 200;
@@ -172,5 +169,3 @@ public class SensorNetwork {
 	}
 
 }
-
-

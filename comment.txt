@@ -1,3 +1,0 @@
-Comment về làm việc trên git nhé: Đừng add file .project .gitignore và .classpath
-Mấy file này được sinh tự động bởi ide và nếu push lên git thì người khác sẽ khó pull về, nó sinh ra nhiều vấn đề khi làm việc trên nhiều ide khác nhau.
-Nếu nhỡ add r thì dùng git rm --cached để xóa nhé.
