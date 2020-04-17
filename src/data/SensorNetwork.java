@@ -18,7 +18,7 @@ public class SensorNetwork {
 	public float wOfField, hOfField; // width and height of sensor network field.
 	public int numOfSensors;
 	public ArrayList<Sensor> listSensors;
-	public float speed;
+	public float maxSpeed;
 	public float limitTime;
 	public float maxE; // maximum exposure on each location
 	public Location start;
@@ -38,7 +38,7 @@ public class SensorNetwork {
 		this.wOfField = wOfField;
 		this.hOfField = hOfField;
 		this.numOfSensors = numOfSensors;
-		this.speed = speed;
+		this.maxSpeed = speed;
 		this.limitTime = limitTime;
 		this.maxE = maxE;
 
@@ -72,7 +72,7 @@ public class SensorNetwork {
 		}
 
 		line = sc.nextLine().trim().split(" ");
-		this.speed = Float.parseFloat(line[0]);
+		this.maxSpeed = Float.parseFloat(line[0]);
 
 		line = sc.nextLine().trim().split(" ");
 		this.start = new Location(Float.parseFloat(line[0]), Float.parseFloat(line[1]));
@@ -106,7 +106,7 @@ public class SensorNetwork {
 			writer.newLine();
 		}
 
-		writer.write(this.speed + "");
+		writer.write(this.maxSpeed + "");
 		writer.newLine();
 
 		writer.write(this.start.x + " " + this.start.y);
@@ -135,7 +135,7 @@ public class SensorNetwork {
 			System.out.printf("\tSensor %3d:  %10f %10f %10f\n", (i + 1), sensor.x, sensor.y, sensor.r);
 		}
 		System.out.println();
-		System.out.println("Speed: " + this.speed);
+		System.out.println("Speed: " + this.maxSpeed);
 		System.out.println("Start: " + this.start.x + "  " + this.start.y);
 		System.out.println("Dest: " + this.dest.x + "  " + this.dest.y);
 		System.out.println("Limit time: " + this.limitTime);
@@ -149,7 +149,6 @@ public class SensorNetwork {
 		for (int i = 0; i <= L; i++) {
 			for (int j = 0; j <= K; j++) {
 				Location newLoc = new Location(j * deltaS, i * deltaS);
-				newLoc.exposure = newLoc.sumExposure(this.listSensors);
 				vertices[i][j] = newLoc;
 			}
 		}
@@ -158,7 +157,9 @@ public class SensorNetwork {
 		this.grid.L = L;
 		this.grid.vertices = vertices;
 	}
-
+	public float exposureAt(Location loc) {
+		return loc.sumExposure(this.listSensors);
+	}
 	public static void main(String[] args) throws Exception {
 		SensorNetwork sNet = new SensorNetwork();
 		int numberSensors = 200;

@@ -35,7 +35,7 @@ public class RandomHeuristic {
 		int rowIndexOfDest = Math.round(this.net.dest.y / this.deltaS);
 		int columnIndexOfDest = Math.round(this.net.dest.x / this.deltaS);
 		double shortestTime = (Math.abs(nextLoc.x - columnIndexOfDest * this.deltaS)
-				+ Math.abs(nextLoc.y - rowIndexOfDest * this.deltaS) + this.deltaS) / this.net.speed;
+				+ Math.abs(nextLoc.y - rowIndexOfDest * this.deltaS) + this.deltaS) / this.net.maxSpeed;
 		return shortestTime < (this.net.limitTime - this.currTime);
 	}
 
@@ -83,8 +83,8 @@ public class RandomHeuristic {
 				}
 				nextLoc = net.grid.vertices[tempRowIndex][tempColumnIndex];
 				this.path.add(nextLoc);
-				this.currTime += this.deltaS / this.net.speed;
-				this.exposure += this.currLoc.sumExposure(this.net.listSensors) * this.deltaS / this.net.speed;
+				this.currTime += this.deltaS / this.net.maxSpeed;
+				this.exposure += this.net.exposureAt(this.currLoc) * this.deltaS / this.net.maxSpeed;
 				this.currLoc = nextLoc;
 			}
 
@@ -96,8 +96,8 @@ public class RandomHeuristic {
 				}
 				nextLoc = net.grid.vertices[tempRowIndex][tempColumnIndex];
 				this.path.add(nextLoc);
-				this.currTime += this.deltaS / this.net.speed;
-				this.exposure += this.currLoc.sumExposure(this.net.listSensors) * this.deltaS / this.net.speed;
+				this.currTime += this.deltaS / this.net.maxSpeed;
+				this.exposure += this.net.exposureAt(this.currLoc) * this.deltaS / this.net.maxSpeed;
 				this.currLoc = nextLoc;
 			}
 		}
@@ -119,7 +119,7 @@ public class RandomHeuristic {
 			writer.newLine();
 		}
 
-		writer.write(net.speed + "");
+		writer.write(net.maxSpeed + "");
 		writer.newLine();
 
 		writer.write(net.start.x + " " + net.start.y);
@@ -165,7 +165,7 @@ public class RandomHeuristic {
 			SensorNetwork net = rh.net;
 			net.initialFromFile(dataFile);
 
-			net.makeGrid(rh.deltaS = (float) 0.5);
+			net.makeGrid(rh.deltaS = 0.5f);
 
 			int rowIndexOfStart = Math.round(net.start.y / rh.deltaS);
 			int columnIndexOfStart = Math.round(net.start.x / rh.deltaS);
@@ -175,8 +175,8 @@ public class RandomHeuristic {
 			Location nextLoc = rh.randomLocation();
 			// add random neighbors while intruder have enough time to go to the destination
 			while (rh.timeCondition(nextLoc)) {
-				rh.currTime += rh.deltaS / net.speed;
-				rh.exposure += rh.currLoc.sumExposure(net.listSensors) * rh.deltaS / net.speed;
+				rh.currTime += rh.deltaS / net.maxSpeed;
+				rh.exposure += net.exposureAt(rh.currLoc) * rh.deltaS / net.maxSpeed;
 				rh.currLoc = nextLoc;
 				rh.path.add(nextLoc);
 				nextLoc = rh.randomLocation();

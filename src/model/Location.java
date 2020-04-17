@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 public class Location extends Point {
 
-	public float exposure;
-
 	public Location(float x, float y) {
 		super(x, y);
 	}
