@@ -157,12 +157,14 @@ public class SensorNetwork {
 		this.grid.L = L;
 		this.grid.vertices = vertices;
 	}
+
 	public float exposureAt(Location loc) {
 		return loc.sumExposure(this.listSensors);
 	}
+
 	public static void main(String[] args) throws Exception {
 		SensorNetwork sNet = new SensorNetwork();
-		int numberSensors = 200;
+		int numberSensors = 40;
 		sNet.randomInitial(100, 100, numberSensors, 7, 5, 100, numberSensors - 2);
 		sNet.saveToFile("./input/" + numberSensors + ".txt");
 //		sNet.initialFromFile("./input/"+numberSensors+".txt");

@@ -151,7 +151,8 @@ public class RandomHeuristic {
 	}
 
 	public static void main(String[] args) throws Exception {
-		String dataFile = "./input/200.txt";
+		int num = 200;
+		String dataFile = "./input/"+num+".txt";
 
 		float maxEx = 0;
 		ArrayList<Location> finalpath = new ArrayList<Location>();
@@ -194,7 +195,7 @@ public class RandomHeuristic {
 		System.out.println("Data file: " + dataFile);
 		System.out.println("exposure :" + maxEx);
 		System.out.println(finalpath.size());
-		saveToFile("./output/output.txt", generalNet, finalpath, maxEx);
+		saveToFile("./output/" + num + ".txt", generalNet, finalpath, maxEx);
 	}
 
 }
