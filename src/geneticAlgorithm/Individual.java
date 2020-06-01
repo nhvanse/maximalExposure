@@ -65,6 +65,8 @@ public class Individual {
 				double phi;
 				// góc của đoạn đường tiếp theo xấp xỉ góc của đoạn đường trước đó
 				phi = Math.acos(dX / dis) + Math.pow(-1, rand.nextInt(2)) * rand.nextFloat() * Math.PI / 12;
+				if (dY < 0) phi += Math.PI;
+//				if (dY < 0) phi = -phi;
 				
 				
 				deltaX = (float) (Math.cos(phi) * distance);
@@ -169,7 +171,7 @@ public class Individual {
 
 	public void printInfo() {
 		System.out.println("GeneLength: " + this.geneLength);
-		net.printInfo();
+//		net.printInfo();
 		System.out.print("Path: ");
 		for (Location loc : path) {
 			System.out.printf("(%10f, %10f), ", loc.x, loc.y);

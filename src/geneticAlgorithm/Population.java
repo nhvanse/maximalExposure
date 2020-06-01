@@ -122,8 +122,10 @@ public class Population {
 	public static void main(String[] args) throws Exception {
 		SensorNetwork net = new SensorNetwork();
 		net.initialFromFile("./input/200.txt");
+
+		
 		int geneLength = 200;
-		int maxNumOfIndividual = 1000;
+		int maxNumOfIndividual = 5000;
 		int numOfInitIndividual = maxNumOfIndividual;
 		int maxCheckGA = 10;
 
@@ -140,7 +142,7 @@ public class Population {
 		while (checkGA < maxCheckGA) {
 			System.out.println("generation "+ ++iter);
 			pop.makeSelection();
-			pop.makeMutationAll();
+//			pop.makeMutationAll();
 			pop.developPopulation(maxNumOfIndividual);
 			
 
