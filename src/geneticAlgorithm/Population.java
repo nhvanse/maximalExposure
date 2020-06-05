@@ -11,9 +11,6 @@ import model.Location;
 import model.Sensor;
 
 
-import java.util.concurrent.TimeUnit;
-
-
 public class Population {
     ArrayList<Individual> listIndividual;
     int geneLength;
@@ -25,7 +22,11 @@ public class Population {
     }
 
     public void randomInitial(int numOfIndividual) {
-        System.out.println("Random initial.");
+        randomInitial(numOfIndividual, false);
+    }
+
+    public void randomInitial(int numOfIndividual, boolean verbose) {
+        if (verbose) System.out.println("Random initial.");
         listIndividual = new ArrayList<Individual>();
         for (int i = 0; i < numOfIndividual; i++) {
             Individual individ = new Individual(geneLength, net);
@@ -45,7 +46,11 @@ public class Population {
     }
 
     public void developPopulation(int maxNumberOfIndividual) {
-        System.out.println("Developing population by make hybridization.");
+        developPopulation(maxNumberOfIndividual, false);
+    }
+
+    public void developPopulation(int maxNumberOfIndividual, boolean verbose) {
+        if (verbose) System.out.println("Developing population by make hybridization.");
         Random rand = new Random();
         while (this.listIndividual.size() < maxNumberOfIndividual) {
             int randomIndex = rand.nextInt(this.listIndividual.size());
@@ -58,15 +63,23 @@ public class Population {
         }
     }
 
-    public void makeMutationAll() { // make mutation 100%
-        System.out.println("Making mutation all individual.");
+    public void makeMutationAll() {
+        makeMutationAll(false);
+    }
+
+    public void makeMutationAll(boolean verbose) { // make mutation 100%
+        if (verbose) System.out.println("Making mutation all individual.");
         for (Individual individ : this.listIndividual) {
             individ.makeMutation();
         }
     }
 
-    public void makeSelection() { // keep half of Population
-        System.out.println("Making selection.");
+    public void makeSelection() {
+        makeSelection(false);
+    }
+
+    public void makeSelection(boolean verbose) { // keep half of Population
+        if (verbose) System.out.println("Making selection.");
         this.listIndividual.sort((a, b) -> Float.compare(a.exposure, b.exposure));
 
         for (int i = this.listIndividual.size() / 2 - 1; i >= 0; i--) {
@@ -75,6 +88,10 @@ public class Population {
     }
 
     public void writeToFile(String fileName) throws Exception {
+        writeToFile(fileName, false);
+    }
+
+    public void writeToFile(String fileName, boolean verbose) throws Exception {
         File newFile = new File(fileName);
         newFile.createNewFile();
         BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
@@ -119,16 +136,26 @@ public class Population {
 
         writer.flush();
         writer.close();
-        System.out.println("Completely saved population!");
+        if (verbose) System.out.println("Completely saved population!");
     }
 
-    public static void main(String[] args) throws Exception {
+    public static float[] GA(String inputFile, int geneLength, int maxNumOfIndividual, String outputFile) throws Exception {
+        return GA(inputFile, geneLength, maxNumOfIndividual, outputFile, false);
+    }
+
+    public static float[] GA(String inputFile, int geneLength, int maxNumOfIndividual, String outputFile, boolean verbose) throws Exception {
+        long startTime = System.currentTimeMillis();
 
         SensorNetwork net = new SensorNetwork();
-        net.initialFromFile("./input/200.txt");
+        net.initialFromFile(inputFile);
 
-        int geneLength = 200;
-        int maxNumOfIndividual = 5000;
+        net.maxSpeed = 5;
+        net.limitTime = 100;
+        net.maxE = 50;
+        net.wOfField = 100;
+        net.hOfField = 100;
+
+
         int numOfInitIndividual = maxNumOfIndividual;
         int maxCheckGA = 10;
 
@@ -142,9 +169,9 @@ public class Population {
 
         int iter = 0;
 
-
         while (checkGA < maxCheckGA) {
-            System.out.println("generation " + ++iter);
+            ++iter;
+            if (verbose) System.out.println("generation " + iter);
 
             pop.makeMutationAll();
             pop.developPopulation(maxNumOfIndividual);
@@ -153,28 +180,61 @@ public class Population {
 
             maxLocalExposure = pop.getBestIndividual().exposure;
 
-            System.out.println(maxLocalExposure + "\n");
+            if (verbose) System.out.println("exposure: " + maxLocalExposure + "\n");
 
             if (maxGlobalExposure < maxLocalExposure) {
                 maxGlobalExposure = maxLocalExposure;
                 checkGA = 0;
-               /* Individual.saveToFile("./output/bestIndividual.txt", net, pop.getBestIndividual().path,
-                        pop.getBestIndividual().exposure);
-                pop.writeToFile("./output/pop.txt");*/
             } else {
                 checkGA += 1;
             }
-
-
-        	//TimeUnit.SECONDS.sleep(2);
-
-
         }
 
-        pop.writeToFile("./output/pop.txt");
-        System.out.println("best: " + pop.getBestIndividual().exposure);
-        Individual.saveToFile("./output/bestIndividual.txt", net, pop.getBestIndividual().path,
+        Individual.saveToFile(outputFile, net, pop.getBestIndividual().path,
                 pop.getBestIndividual().exposure);
-        System.out.println("iter: " + iter);
+
+        long endTime = System.currentTimeMillis();
+        float runTime = (float) ((endTime - startTime) / 1000.0);
+
+        return new float[]{pop.getBestIndividual().exposure, (float) iter, runTime};
+    }
+
+
+    public static void main(String[] args) throws Exception {
+        int geneLength = 200;
+        int maxNumOfIndividual = 5000;
+
+
+        String inputFolder = "./input/";
+        String outputFolder = "./output/";
+
+
+        File logFile = new File("./logs/log_time_" + System.currentTimeMillis() + ".txt");
+        logFile.createNewFile();
+        BufferedWriter writer = new BufferedWriter(new FileWriter(logFile));
+
+        int[] listNumberSensors = {10, 20, 50, 100, 200};
+        int numOfTestEachCase = 10;
+
+        for (int numberSensors : listNumberSensors) {
+            File outputSubFolder = new File(outputFolder + numberSensors);
+            outputSubFolder.mkdir();
+
+            System.out.println(numberSensors + " sensors:");
+            writer.write(numberSensors + " sensors:\n");
+
+            for (int i = 1; i <= numOfTestEachCase; i++) {
+                String inputFile = inputFolder + numberSensors + "/data_" + numberSensors + "_" + i + ".txt";
+                String outputFile = outputSubFolder.toString() + "/" + i + ".txt";
+                float[] result = GA(inputFile, geneLength, maxNumOfIndividual, outputFile);
+                float exposure = result[0];
+                int iters = (int) result[1];
+                float runTime = result[2];
+                System.out.printf("\t file %2d: (exposure : %10f), %3d generations, %8.3f seconds.\n", i, exposure, iters, runTime);
+                writer.write(String.format("\t file %2d: (exposure : %10f), %3d generations, %8.3f seconds.\n", i, exposure, iters, runTime));
+            }
+        }
+        writer.flush();
+        writer.close();
     }
 }

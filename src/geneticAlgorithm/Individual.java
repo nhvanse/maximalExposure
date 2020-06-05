@@ -188,6 +188,11 @@ public class Individual {
 
     public static void saveToFile(String fileName, SensorNetwork net, ArrayList<Location> finalpath, float maxExposure)
             throws Exception {
+        saveToFile(fileName, net, finalpath, maxExposure, false);
+    }
+
+    public static void saveToFile(String fileName, SensorNetwork net, ArrayList<Location> finalpath, float maxExposure, boolean verbose)
+            throws Exception {
         File newFile = new File(fileName);
         newFile.createNewFile();
         BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
@@ -230,7 +235,7 @@ public class Individual {
 
         writer.flush();
         writer.close();
-        System.out.println("Completely saved!");
+        if (verbose) System.out.println("Completely saved!");
     }
 
     public static void main(String[] args) throws Exception {
