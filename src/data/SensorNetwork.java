@@ -52,7 +52,7 @@ public class SensorNetwork {
                     RmaxOfSensors * rand.nextFloat()));
     }
 
-    public void initialFromFile(String file) throws Exception {
+    public void initialFromFile1(String file) throws Exception {
         Scanner sc = new Scanner(new BufferedReader(new FileReader(file)));
 
         String[] line = sc.nextLine().trim().split(" ");
@@ -90,7 +90,37 @@ public class SensorNetwork {
 
     }
 
+    public void initialFromFile(String file) throws Exception {
+        Scanner sc = new Scanner(new BufferedReader(new FileReader(file)));
+
+        String[] line;
+        line = sc.nextLine().trim().split(" ");
+        this.numOfSensors = Integer.parseInt(line[0]);
+
+        this.listSensors = new ArrayList<Sensor>();
+        for (int i = 0; i < this.numOfSensors; i++) {
+            line = sc.nextLine().trim().split(" ");
+            float x = Float.parseFloat(line[0]);
+            float y = Float.parseFloat(line[1]);
+            float z = Float.parseFloat(line[2]);
+            this.listSensors.add(new Sensor(x, y, z));
+        }
+
+        line = sc.nextLine().trim().split(" ");
+        this.start = new Location(Float.parseFloat(line[0]), Float.parseFloat(line[1]));
+
+        line = sc.nextLine().trim().split(" ");
+        this.dest = new Location(Float.parseFloat(line[0]), Float.parseFloat(line[1]));
+
+        sc.close();
+
+    }
+
     public void saveToFile(String fileName) throws Exception {
+        saveToFile(fileName, false);
+    }
+
+    public void saveToFile(String fileName, boolean verbose) throws Exception {
         File newFile = new File(fileName);
         newFile.createNewFile();
         BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
@@ -122,7 +152,7 @@ public class SensorNetwork {
 
         writer.flush();
         writer.close();
-        System.out.println("Completely saved!");
+        if (verbose) System.out.println("Completely saved!");
     }
 
     public void printInfo() {

@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
 
 plt.axis('equal')
 
@@ -46,7 +47,7 @@ def plotChart(filename):
         ax.add_artist(circle)
 
 
-plotChart('./output/pop.txt')
+plotChart(sys.argv[1])
 plt.show(block=False)
 plt.pause(5)
 plt.close()

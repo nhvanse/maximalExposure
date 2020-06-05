@@ -1,0 +1,55 @@
+10 sensors:	 
+	 file  1: (exposure : 277.889465), 123 generations,    8.915 seconds.
+	 file  2: (exposure : 265.829163), 113 generations,    8.832 seconds.
+	 file  3: (exposure : 347.236176), 174 generations,   11.770 seconds.
+	 file  4: (exposure : 266.834167), 130 generations,    8.676 seconds.
+	 file  5: (exposure : 170.854279), 137 generations,    8.670 seconds.
+	 file  6: (exposure : 248.241211), 163 generations,   10.504 seconds.
+	 file  7: (exposure : 179.396988), 124 generations,    7.897 seconds.
+	 file  8: (exposure : 173.366837), 155 generations,    9.515 seconds.
+	 file  9: (exposure : 184.422119), 120 generations,    7.826 seconds.
+	 file 10: (exposure : 174.874374),  89 generations,    6.790 seconds.
+20 sensors:	 
+	 file  1: (exposure : 313.567841), 138 generations,   14.851 seconds.
+	 file  2: (exposure : 268.844238), 137 generations,   14.849 seconds.
+	 file  3: (exposure : 332.160797), 137 generations,   14.728 seconds.
+	 file  4: (exposure : 325.125641), 196 generations,   20.735 seconds.
+	 file  5: (exposure : 358.291473), 217 generations,   23.080 seconds.
+	 file  6: (exposure : 235.678391), 114 generations,   12.062 seconds.
+	 file  7: (exposure : 264.824127), 103 generations,   10.716 seconds.
+	 file  8: (exposure : 256.783936), 153 generations,   17.263 seconds.
+	 file  9: (exposure : 343.216095), 122 generations,   14.335 seconds.
+	 file 10: (exposure : 263.819092), 170 generations,   18.760 seconds.
+50 sensors:	 
+	 file  1: (exposure : 304.020111), 153 generations,   35.143 seconds.
+	 file  2: (exposure : 327.638184), 155 generations,   32.883 seconds.
+	 file  3: (exposure : 236.180908), 116 generations,   24.900 seconds.
+	 file  4: (exposure : 333.668335), 159 generations,   33.568 seconds.
+	 file  5: (exposure : 333.165833), 146 generations,   30.836 seconds.
+	 file  6: (exposure : 257.788940), 116 generations,   24.008 seconds.
+	 file  7: (exposure : 247.236191), 120 generations,   26.446 seconds.
+	 file  8: (exposure : 237.185928), 132 generations,   28.920 seconds.
+	 file  9: (exposure : 341.708557), 149 generations,   32.217 seconds.
+	 file 10: (exposure : 261.306549), 136 generations,   28.252 seconds.
+100 sensors:	 
+	 file  1: (exposure : 322.110565), 175 generations,   70.293 seconds.
+	 file  2: (exposure : 418.592987), 141 generations,   56.097 seconds.
+	 file  3: (exposure : 326.130646), 181 generations,   70.348 seconds.
+	 file  4: (exposure : 323.115570), 168 generations,   65.714 seconds.
+	 file  5: (exposure : 350.753784), 127 generations,   51.877 seconds.
+	 file  6: (exposure : 421.608063), 195 generations,   76.921 seconds.
+	 file  7: (exposure : 426.130676),  70 generations,   28.350 seconds.
+	 file  8: (exposure : 326.633179), 157 generations,   61.826 seconds.
+	 file  9: (exposure : 385.427155), 176 generations,   69.402 seconds.
+	 file 10: (exposure : 326.130646), 151 generations,   59.609 seconds.
+200 sensors:	 
+	 file  1: (exposure : 502.512573), 154 generations,  117.019 seconds.
+	 file  2: (exposure : 422.110565), 143 generations,  110.695 seconds.
+	 file  3: (exposure : 517.085449), 117 generations,   89.354 seconds.
+	 file  4: (exposure : 570.351746), 136 generations,  104.664 seconds.
+	 file  5: (exposure : 444.723633), 146 generations,  114.455 seconds.
+	 file  6: (exposure : 524.120605), 115 generations,   85.707 seconds.
+	 file  7: (exposure : 439.195984), 154 generations,  116.092 seconds.
+	 file  8: (exposure : 587.939697), 146 generations,  111.867 seconds.
+	 file  9: (exposure : 501.005035), 191 generations,  144.235 seconds.
+	 file 10: (exposure : 524.623108), 145 generations,  111.237 seconds.
