@@ -163,12 +163,25 @@ public class SensorNetwork {
 	}
 
 	public static void main(String[] args) throws Exception {
-		SensorNetwork sNet = new SensorNetwork();
-		int numberSensors = 40;
-		sNet.randomInitial(100, 100, numberSensors, 7, 5, 100, numberSensors - 2);
-		sNet.saveToFile("./input/" + numberSensors + ".txt");
-//		sNet.initialFromFile("./input/"+numberSensors+".txt");
-		sNet.printInfo();
+		int[] listNumberSensors = { 10, 20, 50, 100, 200 };
+		int numberTestForOnce = 10;
+
+		for (int i = 0; i < listNumberSensors.length; i++) {
+			int numberSensors = listNumberSensors[i];
+			File file = new File("./input/" + numberSensors);
+			file.mkdir();
+
+			for (int j = 0; j < numberTestForOnce; j++) {
+				SensorNetwork sNet = new SensorNetwork();
+
+				sNet.randomInitial(100, 100, numberSensors, 7, 5, 100, numberSensors/2);
+				sNet.saveToFile("./input/" + numberSensors + "/" + numberSensors + "_" + (j + 1) + ".txt");
+//				sNet.initialFromFile("./input/"+numberSensors+".txt");
+				sNet.printInfo();
+			}
+
+		}
+
 	}
 
 }
