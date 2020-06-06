@@ -204,12 +204,13 @@ public class Population {
         int geneLength = 200;
         int maxNumOfIndividual = 5000;
 
+        long time = System.currentTimeMillis();
 
         String inputFolder = "./input/";
-        String outputFolder = "./output/";
+        File outputFolder = new File("./output/"+ time);
+        outputFolder.mkdir();
 
-
-        File logFile = new File("./logs/log_time_" + System.currentTimeMillis() + ".txt");
+        File logFile = new File("./logs/txt/log_time_" + time + ".txt");
         logFile.createNewFile();
         BufferedWriter writer = new BufferedWriter(new FileWriter(logFile));
 
@@ -217,7 +218,7 @@ public class Population {
         int numOfTestEachCase = 10;
 
         for (int numberSensors : listNumberSensors) {
-            File outputSubFolder = new File(outputFolder + numberSensors);
+            File outputSubFolder = new File(outputFolder.toString() + "/" + numberSensors);
             outputSubFolder.mkdir();
 
             System.out.println(numberSensors + " sensors:");
