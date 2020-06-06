@@ -149,53 +149,48 @@ public class RandomHeuristic {
         writer.close();
         System.out.println("Completely saved!");
     }
+    public static float[] randomAlgorithm(String dataFile) throws Exception{
+        long startTime = System.currentTimeMillis();
 
-    public static void main(String[] args) throws Exception {
-        int num = 200;
-        String dataFile = "./input/" + num + ".txt";
+        RandomHeuristic rh = new RandomHeuristic();
 
-        float maxEx = 0;
-        ArrayList<Location> finalpath = new ArrayList<Location>();
+        SensorNetwork net = rh.net;
+        net.initialFromFile(dataFile);
+        net.maxSpeed= 5;
+        net.maxE = 50;
+        net.limitTime = 100;
+        net.wOfField = 100;
+        net.hOfField = 100;
 
-        SensorNetwork generalNet = new SensorNetwork();
-        generalNet.initialFromFile(dataFile);
-        int iter = 0;
 
-        while (iter++ < 1000) {
-            RandomHeuristic rh = new RandomHeuristic();
-            SensorNetwork net = rh.net;
-            net.initialFromFile(dataFile);
+        net.makeGrid(rh.deltaS = 0.5f);
 
-            net.makeGrid(rh.deltaS = 0.5f);
+        int rowIndexOfStart = Math.round(net.start.y / rh.deltaS);
+        int columnIndexOfStart = Math.round(net.start.x / rh.deltaS);
+        rh.currLoc = net.grid.vertices[rowIndexOfStart][columnIndexOfStart];
+        rh.path.add(rh.currLoc);
 
-            int rowIndexOfStart = Math.round(net.start.y / rh.deltaS);
-            int columnIndexOfStart = Math.round(net.start.x / rh.deltaS);
-            rh.currLoc = net.grid.vertices[rowIndexOfStart][columnIndexOfStart];
-            rh.path.add(rh.currLoc);
-
-            Location nextLoc = rh.randomLocation();
-            // add random neighbors while intruder have enough time to go to the destination
-            while (rh.timeCondition(nextLoc)) {
-                rh.currTime += rh.deltaS / net.maxSpeed;
-                rh.exposure += net.exposureAt(rh.currLoc) * rh.deltaS / net.maxSpeed;
-                rh.currLoc = nextLoc;
-                rh.path.add(nextLoc);
-                nextLoc = rh.randomLocation();
-            }
-
-            // almost out of time
-            rh.computeShortestPath();
-
-            if (rh.exposure > maxEx) {
-                maxEx = rh.exposure;
-                finalpath = rh.path;
-            }
+        Location nextLoc = rh.randomLocation();
+        // add random neighbors while intruder have enough time to go to the destination
+        while (rh.timeCondition(nextLoc)) {
+            rh.currTime += rh.deltaS / net.maxSpeed;
+            rh.exposure += net.exposureAt(rh.currLoc) * rh.deltaS / net.maxSpeed;
+            rh.currLoc = nextLoc;
+            rh.path.add(nextLoc);
+            nextLoc = rh.randomLocation();
         }
 
-        System.out.println("Data file: " + dataFile);
-        System.out.println("exposure :" + maxEx);
-        System.out.println(finalpath.size());
-        saveToFile("./output/" + num + ".txt", generalNet, finalpath, maxEx);
+        // almost out of time
+        rh.computeShortestPath();
+
+        long endTime = System.currentTimeMillis();
+        float runTime = (float) ((endTime -  startTime) / 1000.0);
+        return new float[]{rh.exposure, runTime};
     }
+
+    public static void main(String[] args) throws Exception {
+
+    }
+
 
 }
