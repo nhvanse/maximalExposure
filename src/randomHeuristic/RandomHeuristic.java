@@ -149,14 +149,15 @@ public class RandomHeuristic {
         writer.close();
         System.out.println("Completely saved!");
     }
-    public static float[] randomAlgorithm(String dataFile) throws Exception{
+
+    public static float[] randomAlgorithm(String dataFile) throws Exception {
         long startTime = System.currentTimeMillis();
 
         RandomHeuristic rh = new RandomHeuristic();
 
         SensorNetwork net = rh.net;
         net.initialFromFile(dataFile);
-        net.maxSpeed= 5;
+        net.maxSpeed = 5;
         net.maxE = 50;
         net.limitTime = 100;
         net.wOfField = 100;
@@ -184,13 +185,24 @@ public class RandomHeuristic {
         rh.computeShortestPath();
 
         long endTime = System.currentTimeMillis();
-        float runTime = (float) ((endTime -  startTime) / 1000.0);
+        float runTime = (float) ((endTime - startTime));
         return new float[]{rh.exposure, runTime};
     }
 
     public static void main(String[] args) throws Exception {
+        String inputFolder = "./input/";
 
+
+        int[] listNumberSensors = {10, 20, 50, 100, 200};
+        int numOfTestEachCase = 10;
+        for (int numberSensors : listNumberSensors) {
+            for (int i = 1; i <= numOfTestEachCase; i++) {
+                String inputFile = inputFolder + numberSensors + "/data_" + numberSensors + "_" + i + ".txt";
+                float[] result = randomAlgorithm(inputFile);
+                float exposure = result[0];
+                float runTime = result[1];
+                System.out.printf("%20s \t %10f \t %10d \n", "data_" + numberSensors + "_" + i + ".txt", exposure, (int) (runTime));
+            }
+        }
     }
-
-
 }
